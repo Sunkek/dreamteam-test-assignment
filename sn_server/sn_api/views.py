@@ -16,6 +16,7 @@ from datetime import datetime
 
 
 class UserViewset(viewsets.ModelViewSet):
+    """Show all existing users for test purposes."""
     serializer_class = UserSerializer
 
     def get_queryset(self):
@@ -23,6 +24,7 @@ class UserViewset(viewsets.ModelViewSet):
 
 
 class GroupViewset(viewsets.ModelViewSet):
+    """Show all existing groups for test purposes."""
     serializer_class = GroupSerializer
 
     def get_queryset(self):
@@ -30,6 +32,7 @@ class GroupViewset(viewsets.ModelViewSet):
 
 
 class UserFriendship(APIView):
+    """Add or remove friend"""
 
     def post(self, request, friend):
         sender = request.user
@@ -55,6 +58,7 @@ class UserFriendship(APIView):
 
 
 class GroupMembership(APIView):
+    """Join or leave group"""
 
     def post(self, request, group_id, user_id):
         member = request.user
@@ -78,6 +82,7 @@ class GroupMembership(APIView):
 
 
 class GroupManagement(APIView):
+    """Create, edit or delete group"""
     parser_classes = (MultiPartParser, JSONParser)
 
     def post(self, request, group_id=None):
@@ -134,6 +139,7 @@ class GroupManagement(APIView):
 
 
 class UserProfile(APIView):
+    """Show or edit user profile"""
     parser_classes = (MultiPartParser, JSONParser)
 
     def get(self, request, user_id):
@@ -176,24 +182,3 @@ class UserProfile(APIView):
                 'You cannot edit profiles of other members.',
                 status=status.HTTP_403_FORBIDDEN
             )
-
-
-"""
-{
-    "data":{
-        "email":"ebin@benis.com",
-        "password":"qwe",
-        "first_name":"Ebin",
-        "second_name":"Spurdins",
-        "nickname":"X---DDDD",
-        "birth_date":"01/01/2001"
-    }
-}
-{
-    "data":{
-        "name":"Dank Memes",
-        "description":"Memes",
-        "creator_id":"3"
-    }
-}
-"""
