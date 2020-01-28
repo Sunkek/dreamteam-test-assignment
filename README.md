@@ -34,7 +34,9 @@
 
 ```
 {
-    Я забыл точно, посмотрю попозже
+    "email":"test@test.test"
+    "username":"Suncake",
+    "password":"qwerty"
 }
 ```
 
@@ -74,7 +76,7 @@
     "nickname":"Suncake",
     "birth_date":"02/06/1994"
     "info":"Вставить глубокую мысль с многоточием в конце...",
-    "avatar"="Какое-то изображение, загруженное через форму"
+    "avatar":"Какое-то изображение, загруженное через форму"
 }
 ```
 #### /user/<id>/friendship/
@@ -97,7 +99,7 @@
 {
     "name":"A Piece of Cake",
     "description":"A Warframe clan and Discord community",
-    "avatar"="Какое-то изображение, загруженное через форму"
+    "avatar":"Какое-то изображение, загруженное через форму"
 }
 ```
 
