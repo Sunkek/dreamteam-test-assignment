@@ -113,7 +113,7 @@
     "name":"A Piece of Cake",
     "description":"A Warframe clan and Discord community",
     "administrator":321 # id нового админа
-    "avatar"="Какое-то изображение, загруженное через форму"
+    "avatar":"Какое-то изображение, загруженное через форму"
 }
 ```
 
