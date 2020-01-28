@@ -29,8 +29,7 @@ class User(AbstractUser):
     groups = models.ManyToManyField(
         'Group', 
         related_name='members', 
-        blank=True,
-        on_delete=models.CASCADE
+        blank=True
     )
 
 class Group(models.Model):

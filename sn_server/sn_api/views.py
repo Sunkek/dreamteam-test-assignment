@@ -62,7 +62,7 @@ class UserFriendship(APIView):
 class GroupMembership(APIView):
     """Join or leave group"""
 
-    def post(self, request, group_id, user_id):
+    def post(self, request, group_id):
         """POST group membership"""
         member = request.user
         group = Group.objects.get(id=group_id)
@@ -72,7 +72,7 @@ class GroupMembership(APIView):
             'Member joined the group'
         )
 
-    def delete(self, request, group_id, user_id):
+    def delete(self, request, group_id):
         """DELETE group membership"""
         member = request.user
         group = Group.objects.get(id=group_id)
@@ -88,6 +88,18 @@ class GroupMembership(APIView):
 class GroupManagement(APIView):
     """Create, edit or delete group"""
     parser_classes = (MultiPartParser, JSONParser)
+
+    def get(self, request, group_id):
+        """Returns the group info."""
+        try:
+            group = Group.objects.get(id=group_id)
+            serializer = GroupSerializer(group)
+            return Response(serializer.data)
+        except ObjectDoesNotExist:
+            return Response(
+                'There is no group with this ID.',
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
     def post(self, request, group_id=None):
         """Create a new group.
@@ -152,7 +164,7 @@ class UserProfile(APIView):
     parser_classes = (MultiPartParser, JSONParser)
 
     def get(self, request, user_id):
-    """Returns user profile without password and email."""
+        """Returns user profile without password and email."""
         try:
             user = User.objects.get(id=user_id)
             serializer = UserSerializer(user)

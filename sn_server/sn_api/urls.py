@@ -15,10 +15,11 @@ urlpatterns = [
     url(r'auth/registration/', include('rest_auth.registration.urls')),
     url(r'auth/', include('rest_auth.urls')),
     url(
-        r'group/(?P<group_id>\d)/membership', 
+        r'group/(?P<group_id>\d)/membership/', 
         GroupMembership.as_view()
     ),
-    url(r'group/(?:/(?P<group_id>\d)/)?', GroupManagement.as_view()),
+    url(r'group/(?P<group_id>\d)/', GroupManagement.as_view()),
+    url(r'group/', GroupManagement.as_view()),
     url(
         r'user/(?P<friend>\d)/friendship/', 
         UserFriendship.as_view()

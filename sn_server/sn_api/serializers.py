@@ -11,6 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class GroupSerializer(serializers.ModelSerializer):
     """This class is used to manage how we pass Group to the client app."""
+    members = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
 
     class Meta:
         model = Group
