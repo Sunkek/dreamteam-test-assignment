@@ -35,6 +35,7 @@ class UserFriendship(APIView):
     """Add or remove friend"""
 
     def post(self, request, friend):
+        """POST friendship"""
         sender = request.user
         receiver = User.objects.get(id=friend)
         sender.friends.add(receiver)
@@ -46,6 +47,7 @@ class UserFriendship(APIView):
         )
 
     def delete(self, request, friend):
+        """DELETE friendship"""
         sender = request.user
         receiver = User.objects.get(id=friend)
         sender.friends.remove(receiver)
@@ -61,6 +63,7 @@ class GroupMembership(APIView):
     """Join or leave group"""
 
     def post(self, request, group_id, user_id):
+        """POST group membership"""
         member = request.user
         group = Group.objects.get(id=group_id)
         member.groups.add(group)
@@ -70,6 +73,7 @@ class GroupMembership(APIView):
         )
 
     def delete(self, request, group_id, user_id):
+        """DELETE group membership"""
         member = request.user
         group = Group.objects.get(id=group_id)
         member.groups.remove(group)
@@ -86,12 +90,15 @@ class GroupManagement(APIView):
     parser_classes = (MultiPartParser, JSONParser)
 
     def post(self, request, group_id=None):
+        """Create a new group.
+        Don't pass any id in URL!
+        """
         data = request.data
         group = Group(
             name = data['name'],
             description = data['description'],
             administrator = request.user,
-            avatar=request.data.get('avatar')
+            avatar=data.get('avatar')
         )
         group.save()
         request.user.groups.add(group)
@@ -102,6 +109,7 @@ class GroupManagement(APIView):
         )
 
     def patch(self, request, group_id):
+        """Edit the selected group, only allowed to the group admin."""
         group = Group.objects.get(id=group_id)
         if request.user == group.administrator:
             # TODO There should be a better way
@@ -111,7 +119,8 @@ class GroupManagement(APIView):
                 elif key == 'description':
                     group.description = value
                 elif key == 'administrator':
-                    group.administrator = value
+                    new_admin = User.objects.get(id=value)
+                    group.administrator = new_admin
             group.avatar = request.data.get('avatar') or group.avatar
             group.save()
             return Response(
@@ -125,6 +134,7 @@ class GroupManagement(APIView):
 
 
     def delete(self, request, group_id):
+        """Delete the selected group, only allowed to the group admin."""
         group = Group.objects.get(id=group_id)
         if request.user == group.administrator:
             group.delete()
@@ -133,7 +143,6 @@ class GroupManagement(APIView):
             )
         else:
             return Response(
-                'Only group administrator can delete the group.',
                 status=status.HTTP_403_FORBIDDEN
             )
 
@@ -143,6 +152,7 @@ class UserProfile(APIView):
     parser_classes = (MultiPartParser, JSONParser)
 
     def get(self, request, user_id):
+    """Returns user profile without password and email."""
         try:
             user = User.objects.get(id=user_id)
             serializer = UserSerializer(user)
@@ -154,15 +164,13 @@ class UserProfile(APIView):
             )
 
     def patch(self, request, user_id):
+        """User can edit their own profile by sending any of the below fields"""
         user = User.objects.get(id=user_id)
         if request.user == user:
             # TODO There should be a better way
+            # Also look into possibility to edit email and password
             for key, value in request.data.items():
-                if key == 'email':
-                    user.email = value
-                elif key == 'password':
-                    user.password = value
-                elif key == 'first_name':
+                if key == 'first_name':
                     user.first_name = value
                 elif key == 'second_name':
                     user.second_name = value

@@ -4,11 +4,12 @@ from rest_framework import routers
 from .views import UserViewset, GroupViewset, UserProfile, \
     GroupManagement, GroupMembership, UserFriendship
 
+# Viewsets should be registered via router
 api_router = routers.SimpleRouter()
-
 api_router.register(r'allusers', UserViewset, basename='allusers')
 api_router.register(r'allgroups', GroupViewset, basename='allgroups')
 
+# Our API endpoints
 urlpatterns = [
     url(r'', include(api_router.urls)),
     url(r'auth/registration/', include('rest_auth.registration.urls')),
